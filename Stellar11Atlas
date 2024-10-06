@@ -1,0 +1,98 @@
+// Import necessary libraries
+import * as THREE from 'three';
+
+// Set up the scene, camera, and renderer
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.getElementById('orrery-canvas'),
+  antialias: true
+});
+
+// Set up the Sun
+const sun = new THREE.Mesh(
+  new THREE.SphereGeometry(10, 32, 32),
+  new THREE.MeshBasicMaterial({ color: 0xffffff })
+);
+scene.add(sun);
+
+// Set up the planets
+const planets = [
+  { name: 'Mercury', radius: 2, distance: 50, color: 0x808080 },
+  { name: 'Venus', radius: 4, distance: 80, color: 0xffffff },
+  { name: 'Earth', radius: 5, distance: 110, color: 0x0000ff },
+  { name: 'Mars', radius: 3, distance: 140, color: 0xff0000 },
+  { name: 'Jupiter', radius: 10, distance: 200, color: 0xffff00 },
+  { name: 'Saturn', radius: 8, distance: 240, color: 0x00ffff },
+  { name: 'Uranus', radius: 6, distance: 280, color: 0x00ff00 },
+  { name: 'Neptune', radius: 5, distance: 320, color: 0x0000ff }
+];
+
+planets.forEach((planet) => {
+  const mesh = new THREE.Mesh(
+    new THREE.SphereGeometry(planet.radius, 32, 32),
+    new THREE.MeshBasicMaterial({ color: planet.color })
+  );
+  mesh.position.x = planet.distance;
+  scene.add(mesh);
+});
+
+// Set up some asteroids
+const asteroids = [
+  { name: 'Asteroid 1', radius: 1, distance: 150, color: 0x808080 },
+  { name: 'Asteroid 2', radius: 2, distance: 180, color: 0xffffff },
+  { name: 'Asteroid 3', radius: 1, distance: 220, color: 0x0000ff }
+];
+
+asteroids.forEach((asteroid) => {
+  const mesh = new THREE.Mesh(
+    new THREE.SphereGeometry(asteroid.radius, 32, 32),
+    new THREE.MeshBasicMaterial({ color: asteroid.color })
+  );
+  mesh.position.x = asteroid.distance;
+  scene.add(mesh);
+});
+
+// Animate the scene
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// Add event listeners for zooming and panning
+document.addEventListener('wheel', (event) => {
+  camera.position.z += event.deltaY * 0.1;
+});
+
+document.addEventListener('mousemove', (event) => {
+  if (event.buttons === 1) {
+    camera.position.x += event.movementX * 0.1;
+    camera.position.y += event.movementY * 0.1;
+  }
+});
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orrery Web App</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    #orrery-canvas {
+      width: 100%;
+      height: 100vh;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="orrery-canvas"></canvas>
+  <script src="orrery.js"></script>
+</body>
+</html>
