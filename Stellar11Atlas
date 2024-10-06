@@ -1,3 +1,9 @@
+cd orrery-web-app
+
+npm install
+
+npx http-server
+
 // Import necessary libraries
 import * as THREE from 'three';
 
